@@ -60,26 +60,11 @@ def chat_agent(user_input: UserMessage):
     Always end your answer with a question that moves them forward, like 'Would you like to see photos?' or 'Is there a time you would like to view the property?'"
     
     CONVERSATION HISTORY:
+    {user_input.history}
     User: {user_input.message}
     Sarah:
     """
- @app.route('/chat', methods=['POST'])
-def chat():
-    data = request.json
-    
-    # 1. Get the history (default to empty string if missing)
-    user_message = data.get('message')
-    history = data.get('history', '')
-
-    # 2. Combine them
-    final_prompt = f"Conversation History:\n{history}\n\nUser: {user_message}\nAI:"
-
-    # 3. Send combined prompt
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=final_prompt,
-        max_tokens=150
-    )
+ 
     
     return jsonify({'reply': response.choices[0].text.strip()})
 
