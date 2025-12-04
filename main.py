@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # 1. Setup Google Gemini
 # We get the key from the "Environment Variable" (secure storage)
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+# REPLACE "AIza..." WITH YOUR ACTUAL KEY
+genai.configure(api_key="AIzaSyD......your_real_key_here")
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 app = FastAPI()
