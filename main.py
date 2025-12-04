@@ -65,9 +65,6 @@ def chat_agent(user_input: UserMessage):
     Sarah:
     """
  
-    
-    return jsonify({'reply': response.choices[0].text.strip()})
-
     try:
         response = model.generate_content(prompt)
         return {"reply": response.text}
