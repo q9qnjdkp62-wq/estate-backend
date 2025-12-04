@@ -32,6 +32,7 @@ PROPERTIES = """
 
 class UserMessage(BaseModel):
     message: str
+    history: str = ""
 
 @app.get("/")
 def home():
@@ -39,19 +40,34 @@ def home():
 
 @app.post("/chat")
 def chat_agent(user_input: UserMessage):
+    # 1. THE BRAIN UPGRADE (Paste this over your old prompt)
     prompt = f"""
-    You are a polite estate agent assistant for 'Prestige Estates'.
-    Use ONLY this property list to answer questions. If a house isn't listed, say you don't know.
+    You are 'Sarah', a Senior Estate Agent at Prestige Estates.
     
-    Property List:
+    YOUR GOAL:
+    Your only goal is to get the user to book a viewing.
+    
+    YOUR KNOWLEDGE BASE (Only sell these houses):
     {PROPERTIES}
     
+    RULES OF ENGAGEMENT:
+    1. Be friendly but professional. Use emojis sparingly (🏡).
+    2. If the user says the price is too high, gently remind them of the features (location, size).
+    3. If the user asks about a house NOT on the list, say: "We don't have that right now, but House #1 is similar."
+    4. NEVER invent facts. If it doesn't say the house has a pool, assume it does not.
+    5. SHORT ANSWERS. People are reading this on their phones. Keep it under 50 words.
+
+    Always end your answer with a question that moves them forward, like 'Would you like to see photos?' or 'Is there a time you would like to view the property?'"
+    
+    CONVERSATION HISTORY:
     User: {user_input.message}
-    Agent:
+    Sarah:
     """
+ 
+
     try:
         response = model.generate_content(prompt)
         return {"reply": response.text}
     except Exception as e:
         print(e)
-        return {"reply": "I am having trouble connecting to the AI right now."}
+        return {"reply": "I'm thinking..."}
